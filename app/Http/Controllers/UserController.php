@@ -34,7 +34,7 @@ class UserController extends Controller
             $confiPassword = $data['confiPassword'];
 
             if (strlen(trim($data['name'])) < 1  || strlen(trim($data['email'])) < 1 || strlen(trim($data['password'])) < 1 || strlen(trim($data['confiPassword'])) < 1) {
-                return response()->json(['response'=>'You must complete all fields!'],400,);
+                return response()->json(['response'=>'You must complete all fields!'],400,[]);
             }
 
             if ($password!=$confiPassword) {

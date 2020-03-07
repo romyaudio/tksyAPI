@@ -22,3 +22,5 @@ Route::get('/', function () {
 Route::get('/user', function () {
     return new UserResource(User::find(31));
 });
+
+Route::get('/create','UserController@create');

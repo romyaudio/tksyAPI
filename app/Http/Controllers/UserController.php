@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\User;
 
 class UserController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      *
@@ -42,14 +46,17 @@ class UserController extends Controller
             }   
 
             if (!$exitsEmail) {
-                
+
                 $user = User::create([
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
                     'api_token'=> Str::random(60),
                     'activate' => 0
+                    
                 ]);
+                event(new Registered($user));
+                $this->guard()->login($user);
                 return response()->json($user,201);
             }else{
                 return response()->json(['response'=>'This email is associated with an account!'],400,[]);
@@ -58,6 +65,11 @@ class UserController extends Controller
         }else{
             return response()->json(['error'=>'Unauthorized'],401,[]);
         }
+    }
+
+    protected function guard()
+    {
+        return Auth::guard();
     }
 
     /**

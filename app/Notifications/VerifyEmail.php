@@ -10,8 +10,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailBase;
 
-class VarifyEmail extends Notification implements ShouldQueue
+class VarifyEmail extends VerifyEmailBase implements ShouldQueue
 {
     use Queueable;
 
@@ -41,7 +42,7 @@ class VarifyEmail extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $verificationUrl = $this->verificationUrl($notifiable);
+        $verificationUrl = "localhost:8000s";
 
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);

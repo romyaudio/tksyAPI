@@ -3,16 +3,16 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailBase;
 
-class VarifyEmail extends VerifyEmailBase implements ShouldQueue
+class VerifyEmail extends VerifyEmailBase
 {
     use Queueable;
 
@@ -42,7 +42,7 @@ class VarifyEmail extends VerifyEmailBase implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $verificationUrl = "localhost:8000s";
+        $verificationUrl = $this->verificationUrl($notifiable);
 
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);

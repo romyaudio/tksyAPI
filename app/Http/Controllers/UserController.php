@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmail;
 
 class UserController extends Controller
 {
@@ -52,11 +54,10 @@ class UserController extends Controller
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
                     'api_token'=> Str::random(60),
-                    'activate' => 0
-                    
+                    'activate' => 0    
                 ]);
-                event(new Registered($user));
-                $this->guard()->login($user);
+                Mail::to($data['email'])->queue(new VerifyEmail($user));
+            
                 return response()->json($user,201);
             }else{
                 return response()->json(['response'=>'This email is associated with an account!'],400,[]);

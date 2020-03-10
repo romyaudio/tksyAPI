@@ -12,14 +12,22 @@ class verifyEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $subject = "Verify Email Address";
+
+    public $user;
+
+    public $url;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
+
+        $this->url = 'http://'.$_SERVER["SERVER_NAME"].'/email/verify?id='.$user["id"].'&val='.$user["api_token"];
     }
 
     /**
@@ -29,7 +37,7 @@ class verifyEmail extends Mailable
      */
     public function build()
     {
-         $this->view('view.verifyEmail');
-       return Mail::to('romyaudio@hotmail.com')->send('hola esto es un test');
+         $this->view('mails.VerifyEmail');
+       
     }
 }

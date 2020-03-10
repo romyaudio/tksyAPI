@@ -29,6 +29,7 @@ class verifyEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.verifyEmail');
+         $this->view('view.verifyEmail');
+       return Mail::to('romyaudio@hotmail.com')->send('hola esto es un test');
     }
 }

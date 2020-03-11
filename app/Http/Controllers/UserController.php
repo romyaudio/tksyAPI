@@ -56,7 +56,7 @@ class UserController extends Controller
                     'api_token'=> Str::random(60),
                     'activate' => 0    
                 ]);
-                Mail::to($data['email'])->queue(new VerifyEmail($user));
+                Mail::to($data['email'])->send(new VerifyEmail($user));
             
                 return response()->json($user,201);
             }else{
@@ -127,5 +127,10 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function VerifyEmail(){
+         $msg = 'Email Successfully Verified';
+        return view('mails.CheckVerifyEmail',compact('msg'));
     }
 }

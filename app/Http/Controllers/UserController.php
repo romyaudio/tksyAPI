@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use App\User;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\VerifyEmail;
+use App\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Database\Eloquent\getKey;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +46,7 @@ class UserController extends Controller
 
             if ($password!=$confiPassword) {
                 return response()->json(['response'=>'The password does not match!'],400,[]);
-            }   
+            }
 
             if (!$exitsEmail) {
 
@@ -54,10 +55,10 @@ class UserController extends Controller
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
                     'api_token'=> Str::random(60),
-                    'activate' => 0    
+                    'activate' => 0
                 ]);
                 Mail::to($data['email'])->send(new VerifyEmail($user));
-            
+
                 return response()->json($user,201);
             }else{
                 return response()->json(['response'=>'This email is associated with an account!'],400,[]);
@@ -129,8 +130,23 @@ class UserController extends Controller
         //
     }
 
-    public function VerifyEmail(){
-         $msg = 'Email Successfully Verified';
+    public function VerifyEmail(Request $request){
+        $data = $request->all();
+        $user = User::where('id',$data['id'])->first();
+        $token = User::where('api_token',$data['val'])->first();
+        $verify = User::where('email_verified_at',$data['id'])->first();
+        if (!$user) {
+            $msg = 'This action is unauthorized.';
+        }
+        if (!$token) {
+            $msg = 'This action is unauthorized.';
+        }
+        if (!is_null($verify)) {
+          $msg = 'This email is already verified.';
+      }
+
+
+        //$msg = 'Email Successfully Verified';
         return view('mails.CheckVerifyEmail',compact('msg'));
     }
 }

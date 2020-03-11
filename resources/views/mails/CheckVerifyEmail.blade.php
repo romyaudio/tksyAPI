@@ -39,8 +39,13 @@
    	  		{{ $msg }}
    </div>
    <div class="login">
-   	<a class="btn btn-primary btn-mid" href="">Login</a>
+   	<a id="btn" class="btn btn-primary btn-mid" href="">Login</a>
    </div>
 </div>
 </body>
+<script type="text/javascript">
+	function disable() {
+
+	}
+</script>
 </html>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Http\Requests\RegisterAccount;
 use App\Mail\VerifyEmail;
 use App\User;
 use Illuminate\Auth\Events\Registered;
@@ -11,6 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -31,25 +34,10 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(RegisterAccount $request)
     {
-       if ($request->isJson()) {
+         if ($request->isJson()) {
             $data = $request->json()->all();
-
-            $exitsEmail = User::where('email',$data['email'])->first();
-            $password = $data['password'];
-            $confiPassword = $data['confiPassword'];
-
-            if (strlen(trim($data['name'])) < 1  || strlen(trim($data['email'])) < 1 || strlen(trim($data['password'])) < 1 || strlen(trim($data['confiPassword'])) < 1) {
-                return response()->json(['response'=>'You must complete all fields!'],400,[]);
-            }
-
-            if ($password!=$confiPassword) {
-                return response()->json(['response'=>'The password does not match!'],400,[]);
-            }
-
-            if (!$exitsEmail) {
-
                 $user = User::create([
                     'name' => $data['name'],
                     'email' => $data['email'],
@@ -60,14 +48,13 @@ class UserController extends Controller
                 Mail::to($data['email'])->send(new VerifyEmail($user));
 
                 return response()->json($user,201);
-            }else{
-                return response()->json(['response'=>'This email is associated with an account!'],400,[]);
-            }
+
 
         }else{
             return response()->json(['error'=>'Unauthorized'],401,[]);
         }
     }
+
 
     protected function guard()
     {
@@ -133,20 +120,31 @@ class UserController extends Controller
     public function VerifyEmail(Request $request){
         $data = $request->all();
         $user = User::where('id',$data['id'])->first();
-        $token = User::where('api_token',$data['val'])->first();
-        $verify = User::where('email_verified_at',$data['id'])->first();
+        $token = $data['val'];
+        $api_token = $user->api_token;
+        $verified = $user->email_verified_at;
+
         if (!$user) {
-            $msg = 'This action is unauthorized.';
+            $msg = ['msg'=>'This action is unauthorized.',
+                    'disable'=>'true'
+                    ];
         }
-        if (!$token) {
-            $msg = 'This action is unauthorized.';
+        else if ($token!= $api_token) {
+            $msg = ['msg'=>'This action is unauthorized.',
+                    'disable'=>'true'
+                    ];
         }
-        if (!is_null($verify)) {
-          $msg = 'This email is already verified.';
-      }
-
-
-        //$msg = 'Email Successfully Verified';
-        return view('mails.CheckVerifyEmail',compact('msg'));
-    }
+        else if (!is_null($verified)) {
+          $msg = ['msg'=>'This email is already verified.',
+                    'disable'=>'false'
+                    ];
+      }else{
+      $user->email_verified_at = date('Y-m-d H:m:s');
+      $user->save();
+      $msg = ['msg'=>'Email Successfully Verified.',
+      'disable'=>'false'
+  ];
+}
+return view('mails.CheckVerifyEmail',compact('msg'));
+}
 }

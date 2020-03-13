@@ -36,16 +36,11 @@
    	  		<h3>Verify Email</h3>
    	  	</div>
    	  	<div class="msg">
-   	  		{{ $msg }}
+   	  		{{ $msg['msg'] }}
    </div>
    <div class="login">
    	<a id="btn" class="btn btn-primary btn-mid" href="">Login</a>
    </div>
 </div>
 </body>
-<script type="text/javascript">
-	function disable() {
-
-	}
-</script>
 </html>

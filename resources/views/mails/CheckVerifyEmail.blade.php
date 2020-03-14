@@ -7,16 +7,17 @@
    <style type="text/css">
 	.logo{
 		text-align: center;
-		padding: 20px;
-		margin: auto;
+		padding: 5px;
+		margin: 10px auto;
+		background: #ddd;
 	}
 	.container{
 		padding: 20px;
 		margin:20px auto;
 	}
 	img{
-		width: 150px;
-		height: 150px;
+		width: 65px;
+		height: 65px;
 	}
 	.msg{
 		font-size: 20px;
@@ -30,7 +31,7 @@
 <body>
    <div class="container bg-light">
    	  <div class="logo">
-   	  	<img src="" alt="logo">
+   	  	<img src="/img/ticketssy-icon.png" alt="logo">
    	  	 </div>
    	  	<div class="title">
    	  		<h3>Verify Email</h3>

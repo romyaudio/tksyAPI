@@ -23,7 +23,7 @@ Route::get('/user', function () {
     return new UserResource(User::find(31));
 });
 
-// Auth::routes(['verify' => true]);
+ Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 

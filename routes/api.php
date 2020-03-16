@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:airlock')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware('auth:airlock')->get('/logout', function (Request $request) {
+    $request->user()->tokens()->delete();
+    return response('Logout',200);
+});
 
 Route::post('/create', 'UserController@create');
 Route::post('/login','Login@getToken');
+

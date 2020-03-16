@@ -27,7 +27,7 @@ class verifyEmail extends Mailable
     {
         $this->user = $user;
 
-        $this->url = 'http://'.$_SERVER["SERVER_NAME"].'/email/verify?id='.$user["id"].'&val='.$user["api_token"];
+        $this->url = 'http://'.$_SERVER["SERVER_NAME"].'/email/verify?id='.$user["id"].'&val='.$user["token"];
     }
 
     /**
@@ -38,6 +38,6 @@ class verifyEmail extends Mailable
     public function build()
     {
          $this->view('mails.VerifyEmail');
-       
+
     }
 }

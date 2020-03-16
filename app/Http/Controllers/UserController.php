@@ -42,9 +42,10 @@ class UserController extends Controller
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
+                    'token'    => Str::random(60),
                 ]);
 
-                $token = $user->createToken('token-name')->plainTextToken;
+                //$token = $user->createToken('token-name')->plainTextToken;
                 Mail::to($data['email'])->send(new VerifyEmail($user));
 
                 return response()->json($user,201);
@@ -121,7 +122,7 @@ class UserController extends Controller
         $data = $request->all();
         $user = User::where('id',$data['id'])->first();
         $token = $data['val'];
-        $api_token = $user->api_token;
+        $api_token = $user->token;
         $verified = $user->email_verified_at;
 
         if (!$user) {

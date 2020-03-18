@@ -20,18 +20,8 @@ class Login extends Controller
     			if (is_null($verify)) {
     				return response()->json(['errors'=>'This email is not verified.'],422);
     			}else{
-    				$id = $user['id'];
     				$token = $user->createToken('token-name')->plainTextToken;
-    				$user = [
-    					'email'  => $user->email,
-    					'name'   => $user->name,
-    				];
-    				$response = [
-    				  'user'=>$user,
-    				   'token'=>$token,
-    				];
-                   return response()->json($response,201);
-
+                   return response()->json($token,201);
     			}
     		}else{
     			return response()->json(['errors'=>'These credentials do not match our records.'],422);

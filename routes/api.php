@@ -24,4 +24,5 @@ Route::middleware('auth:airlock')->get('/logout', function (Request $request) {
 
 Route::post('/create', 'UserController@create');
 Route::post('/login','Login@getToken');
+Route::post('/forgotpassword','ResetPassword@reset');
 

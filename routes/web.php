@@ -29,5 +29,6 @@ Route::get('/home', 'HomeController@index')->name('home')->middleware('verified'
 
 Route::get('/email/verify','UserController@VerifyEmail');
 
-Route::get('/reset/password','ResetPassword@newPassword');
+Route::get('/reset/password','ResetPassword@password');
+Route::post('/new/password', 'ResetPassword@newpassword');
 

@@ -24,7 +24,7 @@ class forgotPassword extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|exists:users'
+            'email' => 'required|exists:users|email'
         ];
     }
     public function messages()

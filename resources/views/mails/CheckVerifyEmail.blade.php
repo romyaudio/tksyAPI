@@ -40,7 +40,7 @@
    	  		{{ $msg['msg'] }}
    </div>
    <div class="login">
-   	<a id="btn" class="btn btn-primary btn-mid" href="">Login</a>
+   	<a id="btn" class="btn btn-primary btn-mid" href="http://localhost:3000/login">Login</a>
    </div>
 </div>
 </body>

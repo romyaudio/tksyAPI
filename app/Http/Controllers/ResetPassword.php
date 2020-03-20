@@ -49,7 +49,7 @@ class ResetPassword extends Controller
    {
          $data = $request->all();
          $validator = Validator::make($request->all(),[
-                  'password'=>'required|confirmed',
+                  'password'=>'required|confirmed|min:8',
                   'password_confirmation' => 'required'])->validateWithBag('post');
          $user = User::where('email',$data['email'])->first();
          $user->password = Hash::make($data['password']);

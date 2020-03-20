@@ -20,7 +20,7 @@ class Login extends Controller
     			if (is_null($verify)) {
     				return response()->json(['errors'=>'This email is not verified.'],422);
     			}else{
-    				$token = $user->createToken('token-name')->plainTextToken;
+    				$token = $user->createToken($user->name)->plainTextToken;
                    return response()->json($token,201);
     			}
     		}else{

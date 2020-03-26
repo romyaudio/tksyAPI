@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\RegisterAccount;
 use App\Mail\VerifyEmail;
 use App\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Database\Eloquent\getKey;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -36,26 +32,24 @@ class UserController extends Controller
      */
     public function create(RegisterAccount $request)
     {
-         if ($request->isJson()) {
+        if ($request->isJson()) {
             $data = $request->json()->all();
-                $user = User::create([
-                    'name' => $data['name'],
-                    'email' => $data['email'],
-                    'password' => Hash::make($data['password']),
-                    'token'    => Str::random(60),
-                ]);
+            $user = User::create([
+                'name'     => $data['name'],
+                'email'    => $data['email'],
+                'password' => Hash::make($data['password']),
+                'token'    => Str::random(60),
+            ]);
 
-                //$token = $user->createToken('token-name')->plainTextToken;
-                Mail::to($data['email'])->send(new VerifyEmail($user));
+            //$token = $user->createToken('token-name')->plainTextToken;
+            Mail::to($data['email'])->send(new VerifyEmail($user));
 
-                return response()->json($user,201);
+            return response()->json($user, 201);
 
-
-        }else{
-            return response()->json(['error'=>'Unauthorized'],401,[]);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401, []);
         }
     }
-
 
     protected function guard()
     {
@@ -118,34 +112,33 @@ class UserController extends Controller
         //
     }
 
-    public function VerifyEmail(Request $request){
-        $data = $request->all();
-        $user = User::where('id',$data['id'])->first();
-        $token = $data['val'];
+    public function VerifyEmail(Request $request)
+    {
+        $data      = $request->all();
+        $user      = User::where('id', $data['id'])->first();
+        $token     = $data['val'];
         $api_token = $user->token;
-        $verified = $user->email_verified_at;
+        $verified  = $user->email_verified_at;
 
         if (!$user) {
-            $msg = ['msg'=>'This action is unauthorized.',
-                    'disable'=>'true'
-                    ];
+            $msg = ['msg' => 'This action is unauthorized.',
+                'disable'     => 'true',
+            ];
+        } else if ($token != $api_token) {
+            $msg = ['msg' => 'This action is unauthorized.',
+                'disable'     => 'true',
+            ];
+        } else if (!is_null($verified)) {
+            $msg = ['msg' => 'This email is already verified.',
+                'disable'     => 'false',
+            ];
+        } else {
+            $user->email_verified_at = date('Y-m-d H:m:s');
+            $user->save();
+            $msg = ['msg' => 'Email Successfully Verified.',
+                'disable'     => 'false',
+            ];
         }
-        else if ($token!= $api_token) {
-            $msg = ['msg'=>'This action is unauthorized.',
-                    'disable'=>'true'
-                    ];
-        }
-        else if (!is_null($verified)) {
-          $msg = ['msg'=>'This email is already verified.',
-                    'disable'=>'false'
-                    ];
-      }else{
-      $user->email_verified_at = date('Y-m-d H:m:s');
-      $user->save();
-      $msg = ['msg'=>'Email Successfully Verified.',
-      'disable'=>'false'
-  ];
-}
-return view('mails.CheckVerifyEmail',compact('msg'));
-}
+        return view('mails.CheckVerifyEmail', compact('msg'));
+    }
 }

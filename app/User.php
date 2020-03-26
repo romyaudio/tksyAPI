@@ -2,10 +2,10 @@
 
 namespace App;
 
+use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\VerifyEmail;
 use Laravel\Airlock\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -18,7 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email','password','token'
+        'name', 'email', 'password', 'token',
     ];
 
     /**

@@ -13,7 +13,7 @@ class CreateBussesTable extends Migration
      */
     public function up()
     {
-        Schema::create('busses', function (Blueprint $table) {
+        Schema::create('business', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
@@ -21,7 +21,7 @@ class CreateBussesTable extends Migration
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
-            $table->string('zipcode')->nullable(); 
+            $table->string('zipcode')->nullable();
             $table->string('website')->nullable();
             $table->integer('iduser');
             $table->timestamps();

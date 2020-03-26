@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Buss;
+use App\Business;
 use App\Http\Requests\NewBuss;
 use App\Http\Requests\UserLogin;
 use App\User;
@@ -51,7 +51,7 @@ class Login extends Controller
     {
         $data->all();
 
-        $business = Buss::create([
+        $business = Business::create([
             'name'    => $data['name'],
             'email'   => $data['email'],
             'phone'   => $data['phone'],
@@ -62,8 +62,8 @@ class Login extends Controller
             'website' => $data['website'],
             'iduser'  => $data['iduser'],
         ]);
-        $user         = User::where('id', $data['iduser'])->first();
-        $user->busses = $business->name;
+        $user           = User::where('id', $data['iduser'])->first();
+        $user->business = $business->name;
         $user->save();
         return response()->json([], 201);
     }

@@ -25,7 +25,7 @@ class NewBuss extends FormRequest
     {
         return [
             'name'  => 'required',
-            'email' => 'required|email|unique:busses',
+            'email' => 'required|email|unique:businesses',
             'phone' => 'required',
         ];
     }

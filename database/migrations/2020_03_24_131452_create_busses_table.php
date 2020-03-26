@@ -13,7 +13,7 @@ class CreateBussesTable extends Migration
      */
     public function up()
     {
-        Schema::create('business', function (Blueprint $table) {
+        Schema::create('businesses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();

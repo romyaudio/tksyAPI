@@ -21,13 +21,15 @@ class Login extends Controller
                 if (is_null($verify)) {
                     return response()->json(['errors' => 'This email is not verified.'], 422);
                 } else {
-                    $token = $user->createToken($user->name)->plainTextToken;
-                    $buss  = $user->busses;
+                    $token  = $user->createToken($user->name)->plainTextToken;
+                    $buss   = $user->business;
+                    $iduser = $user->id;
+
                     if (is_null($buss)) {
-                        $iduser = $user->id;
                         return response()->json(['token' => $token, 'iduser' => $iduser], 222);
                     } else {
-                        return response()->json($token, 201);
+
+                        return response()->json(['token' => $token, 'user' => $user], 201);
                     }
 
                 }
@@ -65,6 +67,6 @@ class Login extends Controller
         $user           = User::where('id', $data['iduser'])->first();
         $user->business = $business->name;
         $user->save();
-        return response()->json([], 201);
+        return response()->json($business, 201);
     }
 }

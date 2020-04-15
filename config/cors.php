@@ -13,22 +13,32 @@ return [
     |
     | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
     |
-    */
+     */
 
-    'paths' => ['api/*'],
+    'paths'                    => [
+        'api/*',
+        'login',
+        'logout',
+        'sanctum/csrf-cookie',
+        'list/teams',
+        'create/team',
+        'edit/team',
+        'update/team',
+        'delete/team',
+    ],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods'          => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins'          => ['http://localhost:3000'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers'          => ['*'],
 
-    'exposed_headers' => false,
+    'exposed_headers'          => false,
 
-    'max_age' => false,
+    'max_age'                  => false,
 
-    'supports_credentials' => false,
+    'supports_credentials'     => true,
 
 ];

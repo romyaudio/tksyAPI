@@ -23,6 +23,12 @@ class TeamController extends Controller
 
     public function store(NewTeam $request)
     {
+        $user = User::where('email', $request['email'])->first();
+
+        if ($user) {
+            return response()->json(['errors' => ['email' => 'This email is associated with a user account, use another email.']], 422);
+        }
+
         if ($request->isJson()) {
             $password = Str::random(8);
             $team     = Team::create([

@@ -67,7 +67,7 @@ trait AuthenticatesUsers
     {
         $request->validate([
             $this->username() => 'required|string',
-            'password' => 'required|string',
+            'password'        => 'required|string',
         ]);
     }
 
@@ -112,8 +112,8 @@ trait AuthenticatesUsers
         }
 
         return $request->wantsJson()
-                    ? new Response('', 204)
-                    : redirect()->intended($this->redirectPath());
+        ? new Response('', 204)
+        : redirect()->intended($this->redirectPath());
     }
 
     /**
@@ -172,8 +172,8 @@ trait AuthenticatesUsers
         }
 
         return $request->wantsJson()
-            ? new Response('', 204)
-            : redirect('/');
+        ? new Response('', 204)
+        : redirect('/');
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Business;
 use App\Http\Requests\NewBuss;
 use App\Http\Requests\UserLogin;
+use App\Team;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
@@ -12,33 +13,47 @@ use Illuminate\Support\Facades\Hash;
 
 class Login extends Controller
 {
-    public function getToken(UserLogin $data)
+    public function login(UserLogin $data)
     {
-        if ($data->isJson()) {
-            $user = User::where('email', $data['email'])->first();
-            if ($user && Hash::check($data['password'], $user->password)) {
-                $verify = $user->email_verified_at;
-                if (is_null($verify)) {
-                    return response()->json(['errors' => 'This email is not verified.'], 422);
-                } else {
-                    $token  = $user->createToken($user->name)->plainTextToken;
-                    $buss   = $user->business;
-                    $iduser = $user->id;
+        $user = User::where('email', $data['email'])->first();
+        $team = Team::where('email', $data['email'])->first();
 
-                    if (is_null($buss)) {
-                        return response()->json(['token' => $token, 'iduser' => $iduser], 222);
+        if ($user) {
+            if ($data->isJson()) {
+
+                $user = User::where('email', $data['email'])->first();
+
+                if ($user && Hash::check($data['password'], $user->password)) {
+                    $verify = $user->email_verified_at;
+                    if (is_null($verify)) {
+                        return response()->json(['errors' => 'This email is not verified.'], 422);
                     } else {
-
-                        return response()->json(['token' => $token, 'user' => $user], 201);
+                        $token  = '65';
+                        $buss   = $user->business;
+                        $iduser = $user->id;
+                        if (is_null($buss)) {
+                            return response()->json(['token' => $token, 'iduser' => $iduser], 222);
+                        } else {
+                            return response()->json(['token' => $token, 'user' => $user], 201);
+                        }
                     }
-
+                } else {
+                    return response()->json(['errors' => 'These credentials do not match our records.'], 422);
                 }
+
+            } else {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+
+        } else if ($team) {
+            if ($team && Hash::check($data['password'], $team->password)) {
+                $token = $team->createToken($team->name)->plainTextToken;
+                return response()->json(['token' => $token, 'team' => $team], 201);
             } else {
                 return response()->json(['errors' => 'These credentials do not match our records.'], 422);
             }
-
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['errors' => 'These credentials do not match our records.'], 422);
         }
 
     }

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Resources\User as UserResource;
 use App\User;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +13,7 @@ use App\User;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,12 +23,12 @@ Route::get('/user', function () {
     return new UserResource(User::find(31));
 });
 
- Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
-Route::get('/email/verify','UserController@VerifyEmail');
+Route::get('/email/verify', 'UserController@VerifyEmail');
 
-Route::get('/reset/password','ResetPassword@password');
+Route::get('/reset/password', 'ResetPassword@password');
 Route::post('/new/password', 'ResetPassword@newpassword');
-
+//Route::post('login', 'Auth\LoginController@login');

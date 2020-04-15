@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::middleware('auth:airlock')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware('auth:airlock')->get('/logout', function (Request $request) {
@@ -22,14 +22,14 @@ Route::middleware('auth:airlock')->get('/logout', function (Request $request) {
     return response('Logout', 200);
 });
 
-Route::middleware('auth:airlock')->post('/create/team', 'TeamController@store')->name('create-team');
-Route::middleware('auth:airlock')->get('list/teams', 'TeamController@index')->name('list-teams');
-Route::middleware('auth:airlock')->get('/edit/team', 'TeamController@edit')->name('edit-teams');
-Route::middleware('auth:airlock')->post('/update/team', 'TeamController@update')->name('update-team');
-Route::middleware('auth:airlock')->post('/delete/team', 'TeamController@destroy')->name('destroy-team');
+Route::middleware('auth:sanctum')->post('/create/team', 'TeamController@store')->name('create-team');
+Route::middleware('auth:sanctum')->get('/list/teams', 'TeamController@index')->name('list-teams');
+Route::middleware('auth:sanctum')->get('/edit/team', 'TeamController@edit')->name('edit-teams');
+Route::middleware('auth:sanctum')->post('/update/team', 'TeamController@update')->name('update-team');
+Route::middleware('auth:sanctum')->post('/delete/team', 'TeamController@destroy')->name('destroy-team');
 
 Route::post('/create', 'UserController@create')->name('create-user');
-Route::post('/login', 'Login@getToken')->name('login');
+Route::post('/login', 'Login@login')->name('login');
 Route::get('/states', 'Login@getstates')->name('Get-states');
 Route::post('/reset/password', 'ResetPassword@reset')->name('reset-password');
 Route::post('/create/business', 'Login@createbusiness')->name('create-business');
